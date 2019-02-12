@@ -155,7 +155,7 @@ void Desenha(void)
 
    */
 
-   glFlush();
+   glutSwapBuffers();
 }
 
 
@@ -208,7 +208,7 @@ void Teclado (unsigned char key, int x, int y)
 int main(int argc, char** argv)
 {
    glutInit(&argc,argv);
-   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
    glutInitWindowPosition(5,5); // Especifica a posição inicial da janela GLUT
    glutInitWindowSize(400,400); // Especifica o tamanho inicial em pixels da janela GLUT
    glutCreateWindow("labirinto Impossível");
