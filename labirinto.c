@@ -33,11 +33,25 @@ GLfloat yStep;
 GLfloat windowXmin, windowXmax;
 GLfloat windowYmin, windowYmax;
 
+struct cor
+{
+   float r;
+   float g;
+   float b;
+};
+
+struct cor fundo;
+struct cor paredes;
+struct cor objeto;
 
 void Inicializa (void)
 {
    // Define a cor de fundo da janela de visualização como branco
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+   paredes.r = 0;
+   paredes.g = 0;
+   paredes.b = 0;
+
    // Define a janela de visualização 2D
    glMatrixMode(GL_PROJECTION);
    gluOrtho2D(0.0,105.0,0.0,105.0);
@@ -50,7 +64,7 @@ void Desenha(void)
    glClear(GL_COLOR_BUFFER_BIT);
    
    // Define a cor de desenho: preto
-   glColor3f(0.0,0.0,0.0);
+   glColor3f(paredes.r,paredes.g,paredes.b);
  
    //Desenhando as linhas do labirinto na cor corrente.
    
