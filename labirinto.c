@@ -41,7 +41,7 @@ void Inicializa (void)
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
    // Define a janela de visualização 2D
    glMatrixMode(GL_PROJECTION);
-   gluOrtho2D(0.0,70.0,0.0,70.0);
+   gluOrtho2D(0.0,105.0,0.0,105.0);
    glMatrixMode(GL_MODELVIEW); //para n manipular a matriz de projeção
 }
    // Função callback chamada para fazer o desenho
@@ -58,88 +58,88 @@ void Desenha(void)
    glLineWidth(4);
    glBegin(GL_LINES);
    glVertex2f(0, 0);
-   glVertex2f(70, 0);
+   glVertex2f(105, 0);
    glEnd();
    
    glBegin(GL_LINES);
-   glVertex2f(0, 70);
-   glVertex2f(70, 70);
+   glVertex2f(0, 105);
+   glVertex2f(105, 105);
    glEnd();
    
    glBegin(GL_LINE_STRIP);
    glVertex2f(0, 0);
-   glVertex2f(0, 20);
-   glVertex2f(10,20);
-   glVertex2f(10,30);
-   glVertex2f(20,30);
-   glVertex2f(20,50);
-   glVertex2f(30,50);
-   glVertex2f(30,60);
-   glEnd();
-   
-   glBegin(GL_LINES);
    glVertex2f(0, 30);
-   glVertex2f(0, 70);
-   glEnd();
-   
-   glBegin(GL_LINE_STRIP);
-   glVertex2f(0, 40);
-   glVertex2f(10, 40);
-   glVertex2f(10, 60);
-   glVertex2f(20, 60);
-   glEnd();
-   
-   glBegin(GL_LINE_STRIP);
-   glVertex2f(20, 30);
-   glVertex2f(20, 10);
-   glVertex2f(10, 10);
+   glVertex2f(15,30);
+   glVertex2f(15,45);
+   glVertex2f(30,45);
+   glVertex2f(30,75);
+   glVertex2f(45,75);
+   glVertex2f(45,90);
    glEnd();
    
    glBegin(GL_LINES);
-   glVertex2f(50, 0);
-   glVertex2f(50, 10);
+   glVertex2f(0, 45);
+   glVertex2f(0, 105);
+   glEnd();
+   
+   glBegin(GL_LINE_STRIP);
+   glVertex2f(0, 60);
+   glVertex2f(15, 60);
+   glVertex2f(15, 90);
+   glVertex2f(30, 90);
+   glEnd();
+   
+   glBegin(GL_LINE_STRIP);
+   glVertex2f(30, 45);
+   glVertex2f(30, 15);
+   glVertex2f(15, 15);
    glEnd();
    
    glBegin(GL_LINES);
-   glVertex2f(70, 70);
-   glVertex2f(70, 40);
+   glVertex2f(75, 0);
+   glVertex2f(75, 15);
+   glEnd();
+   
+   glBegin(GL_LINES);
+   glVertex2f(105, 105);
+   glVertex2f(105, 60);
    glEnd();
       
    glBegin(GL_LINE_STRIP);
-   glVertex2f(70, 0);
-   glVertex2f(70, 30);
-   glVertex2f(40, 30);
+   glVertex2f(105, 0);
+   glVertex2f(105, 45);
+   glVertex2f(60, 45);
    glEnd();
    
    glBegin(GL_LINES);
-   glVertex2f(60, 30);
+   glVertex2f(90, 45);
+   glVertex2f(90, 90);
+   glEnd();
+   
+   glBegin(GL_LINES);
+   glVertex2f(90, 75);
+   glVertex2f(75, 75);
+   glEnd();
+   
+   glBegin(GL_LINES);
+   glVertex2f(60, 90);
+   glVertex2f(75, 90);
+   glEnd();
+   
+   glBegin(GL_LINES);
    glVertex2f(60, 60);
-   glEnd();
-   
-   glBegin(GL_LINES);
-   glVertex2f(60, 50);
-   glVertex2f(50, 50);
-   glEnd();
-   
-   glBegin(GL_LINES);
-   glVertex2f(40, 60);
-   glVertex2f(50, 60);
-   glEnd();
-   
-   glBegin(GL_LINES);
-   glVertex2f(40, 40);
-   glVertex2f(50, 40);
+   glVertex2f(75, 60);
    glEnd();
    
    glBegin(GL_LINE_STRIP);
-   glVertex2f(60, 10);
-   glVertex2f(60, 20);
-   glVertex2f(40,20);
-   glVertex2f(40,10);
-   glVertex2f(30,10);
-   glVertex2f(30,40);
-   glVertex2f(40,40);
-   glVertex2f(40,70);
+   glVertex2f(90, 15);
+   glVertex2f(90, 30);
+   glVertex2f(60,30);
+   glVertex2f(60,15);
+   glVertex2f(45,15);
+   glVertex2f(45,60);
+   glVertex2f(60,60);
+   glVertex2f(60,105);
    glEnd();
    
    
@@ -181,19 +181,19 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 	// superior) mantendo a proporção com a janela de visualização
 	if (largura <= altura) 
 	{
-		gluOrtho2D (0.0f, 70.0f, 0.0f*altura/largura, 70.0f*altura/largura);
+		gluOrtho2D (0.0f, 105.0f, 0.0f*altura/largura, 105.0f*altura/largura);
 		windowXmin = 0.0f;
-		windowXmax =  70.0f;
+		windowXmax =  105.0f;
 		windowYmin = 0.0f*altura/largura;
-		windowYmax = 70.0f*altura/largura;
+		windowYmax = 105.0f*altura/largura;
 	}
 	else
 	{ 
-		gluOrtho2D (0.0f*largura/altura, 70.0f*largura/altura, 0.0f, 70.0f);
+		gluOrtho2D (0.0f*largura/altura, 105.0f*largura/altura, 0.0f, 105.0f);
 		windowXmin = 0.0f*largura/altura;
-		windowXmax =  70.0f*largura/altura;
+		windowXmax =  105.0f*largura/altura;
 		windowYmin = 0.0f;
-		windowYmax =  70.0f;
+		windowYmax =  105.0f;
 	}
 }
 
