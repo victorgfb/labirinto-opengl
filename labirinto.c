@@ -12,6 +12,8 @@
 
 #include <stdlib.h>
 #include <GL/glut.h>
+#define xStep 5 //incremento no eixo x
+#define yStep 5 //incremento no eixo y
 
 // Variáveis que guardam a translação que será aplicada 
 // sobre a casinha
@@ -23,21 +25,26 @@ GLfloat Ty;
 GLfloat minX, maxX;
 GLfloat minY, maxY;
 
-// Variáveis que guardam o tamanho do incremento nas 
-// direções x e y (número de pixels para se mover a 
-// cada intervalo de tempo)
-GLfloat xStep;
-GLfloat yStep;
-
 // Variáveis que guardam a largura e altura da janela
 GLfloat windowXmin, windowXmax;
 GLfloat windowYmin, windowYmax;
+
+//Variáveis que guardam os vértices do triangulo
+int x1,x2,x3;
+
+int y4,y2,y3;
 
 
 void Inicializa (void)
 {
    // Define a cor de fundo da janela de visualização como branco
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+   x1 = 0;
+   x2 = 10;
+   x3 = 5;
+   y4 = 30;
+   y2 = 30;
+   y3 = 40;
    // Define a janela de visualização 2D
    glMatrixMode(GL_PROJECTION);
    gluOrtho2D(0.0,105.0,0.0,105.0);
@@ -46,15 +53,24 @@ void Inicializa (void)
    // Função callback chamada para fazer o desenho
 void Desenha(void)
 {
+      
+   // Muda para o sistema de coordenadas do modelo
+   glMatrixMode(GL_MODELVIEW);
+   // Inicializa a matriz de transformação corrente
+   glLoadIdentity();
+   
    //Limpa a janela de visualização com a cor de fundo especificada
    glClear(GL_COLOR_BUFFER_BIT);
    
+   // Aplica uma translação sobre a casinha
+   glTranslatef(Tx, Ty, 0.0f);
+    
    // Define a cor de desenho: preto
    glColor3f(0.0,0.0,0.0);
  
    //Desenhando as linhas do labirinto na cor corrente.
    
-   glLineWidth(4);
+   glLineWidth(2);
    glBegin(GL_LINES);
    glVertex2f(0, 0);
    glVertex2f(105, 0);
@@ -149,9 +165,9 @@ void Desenha(void)
    
    glColor3f(1,0,0);
    glBegin(GL_TRIANGLES);
-   glVertex3f(0, 0, 0);
-   glVertex3f(10, 0, 0);
-   glVertex3f(5, 10, 0);
+   glVertex2f(x1, y4);
+   glVertex2f(x2, y2);
+   glVertex2f(x3, y3);
    glEnd();
 
   
@@ -174,6 +190,36 @@ void GerenciaMouse(int button, int state, int x, int y)
 
 
 */
+
+// Função callback chamada para gerenciar eventos do teclado   
+// para teclas especiais, tais como F1, PgDn e Home
+void TeclasEspeciais(int key)
+{
+    if(key == GLUT_KEY_UP) {
+           Ty+= yStep;
+           glMatrixMode(GL_PROJECTION);
+           
+    }
+    if(key == GLUT_KEY_DOWN) {
+           Ty -= yStep;
+           glMatrixMode(GL_PROJECTION);
+           
+    }
+    if(key == GLUT_KEY_RIGHT) {
+           Tx += xStep;
+           glMatrixMode(GL_PROJECTION);
+           
+    }
+    if(key == GLUT_KEY_LEFT) {
+           Tx -= xStep;
+           glMatrixMode(GL_PROJECTION);
+           
+    }
+
+    glutPostRedisplay();
+}
+   
+
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
 	GLsizei largura, altura;
@@ -230,6 +276,8 @@ int main(int argc, char** argv)
    glutDisplayFunc(Desenha);
    glutReshapeFunc(AlteraTamanhoJanela); // Registra a função callback de redimensionamento da janela de visualização
    glutKeyboardFunc (Teclado);
+   // Registra a função callback que será chamada a cada intervalo de tempo
+   glutTimerFunc(150, TeclasEspeciais, 1);
    Inicializa();
    glutMainLoop();
    
