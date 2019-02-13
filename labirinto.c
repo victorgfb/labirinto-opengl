@@ -148,7 +148,7 @@ void Desenha(void)
    //Desenhando um triangulo vermelho:
    
    glColor3f(1,0,0);
-   glBegin(GL_LINE_LOOP);
+   glBegin(GL_TRIANGLES);
    glVertex3f(0, 0, 0);
    glVertex3f(10, 0, 0);
    glVertex3f(5, 10, 0);
