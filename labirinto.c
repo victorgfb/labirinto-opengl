@@ -34,7 +34,6 @@ GLfloat windowXmin, windowXmax;
 GLfloat windowYmin, windowYmax;
 
 
-
 void Inicializa (void)
 {
    // Define a cor de fundo da janela de visualização como branco
@@ -144,21 +143,37 @@ void Desenha(void)
    
    
    
-   /*
+  
    
-   //Desenhando um quadrado vazado:
+   //Desenhando um triangulo vermelho:
+   
+   glColor3f(1,0,0);
    glBegin(GL_LINE_LOOP);
-   glVertex3f(4, 16, 0);
-   glVertex3f(4, 4, 0);
-   glVertex3f(16, 4, 0);
+   glVertex3f(0, 0, 0);
+   glVertex3f(10, 0, 0);
+   glVertex3f(5, 10, 0);
    glEnd();
 
-   */
+  
 
    glutSwapBuffers();
 }
 
 
+/*
+// Função callback chamada para gerenciar eventos do mouse
+void GerenciaMouse(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON)
+         if (state == GLUT_DOWN) {
+               
+                  
+         }
+    glutPostRedisplay();
+}
+
+
+*/
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
 	GLsizei largura, altura;
@@ -214,7 +229,6 @@ int main(int argc, char** argv)
    glutCreateWindow("labirinto Impossível");
    glutDisplayFunc(Desenha);
    glutReshapeFunc(AlteraTamanhoJanela); // Registra a função callback de redimensionamento da janela de visualização
-
    glutKeyboardFunc (Teclado);
    Inicializa();
    glutMainLoop();
