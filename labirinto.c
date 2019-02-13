@@ -10,7 +10,10 @@
 //linhas pretas
 //*****************************************************
 
+#define nCores 3
+
 #include <stdlib.h>
+#include <stdio.h>
 #include <GL/glut.h>
 
 // Variáveis que guardam a translação que será aplicada 
@@ -43,14 +46,61 @@ struct cor
 struct cor fundo;
 struct cor paredes;
 struct cor objeto;
+struct cor coresParedes[nCores];
+struct cor coresFundo[nCores];
+struct cor coresObjeto[nCores];
+int i = 0;
 
 void Inicializa (void)
 {
+   
+   //1 mudança
+   
+   coresParedes[0].r = 0;
+   coresParedes[0].g = 0; //parede preto.
+   coresParedes[0].b = 0;
+
+   coresFundo[0].r = 1; 
+   coresFundo[0].g = 1; //fundo branco.
+   coresFundo[0].b = 1;
+
+   coresObjeto[0].r = 1;
+   coresObjeto[0].g = 0;//objeto vermelho
+   coresObjeto[0].b = 0;
+
+   // 2 mudança
+
+   coresParedes[1].r = 1;
+   coresParedes[1].g = 1;//parede branca
+   coresParedes[1].b = 1;
+
+   coresFundo[1].r = 0;
+   coresFundo[1].g = 0; //fundo  preto
+   coresFundo[1].b = 0;
+
+   coresObjeto[1].r = 1;
+   coresObjeto[1].g = 1; //objeto amarelo
+   coresObjeto[1].b = 0;
+
+   // 3 mudança
+   coresParedes[2].r = 1;
+   coresParedes[2].g = 0;//parede magenta
+   coresParedes[2].b = 1;
+
+   coresFundo[2].r = 0;
+   coresFundo[2].g = 1; //fundo ciano 
+   coresFundo[2].b = 1;
+
+   coresObjeto[2].r = 0.5;
+   coresObjeto[2].g = 0.5; //objeto cinza
+   coresObjeto[2].b = 0.5;
+
+   paredes = coresParedes[i];
+   fundo = coresFundo[i];
+   objeto = coresObjeto[i];
+
    // Define a cor de fundo da janela de visualização como branco
-   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-   paredes.r = 0;
-   paredes.g = 0;
-   paredes.b = 0;
+   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
 
    // Define a janela de visualização 2D
    glMatrixMode(GL_PROJECTION);
@@ -60,6 +110,7 @@ void Inicializa (void)
    // Função callback chamada para fazer o desenho
 void Desenha(void)
 {
+    glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
    //Limpa a janela de visualização com a cor de fundo especificada
    glClear(GL_COLOR_BUFFER_BIT);
    
@@ -155,39 +206,33 @@ void Desenha(void)
    glVertex2f(60,105);
    glEnd();
    
-   
-   
-  
-   
    //Desenhando um triangulo vermelho:
    
-   glColor3f(1,0,0);
+   glColor3f(objeto.r,objeto.g,objeto.b);
    glBegin(GL_TRIANGLES);
    glVertex3f(0, 0, 0);
    glVertex3f(10, 0, 0);
    glVertex3f(5, 10, 0);
    glEnd();
 
-  
-
    glutSwapBuffers();
 }
 
 
-/*
+
 // Função callback chamada para gerenciar eventos do mouse
 void GerenciaMouse(int button, int state, int x, int y)
 {
     if (button == GLUT_LEFT_BUTTON)
-         if (state == GLUT_DOWN) {
-               
-                  
-         }
+         paredes = coresParedes[i];
+         fundo = coresFundo[i];
+         objeto = coresObjeto[i];
+         i++;
+         if(i >= nCores)
+            i = 0;
     glutPostRedisplay();
 }
 
-
-*/
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
 	GLsizei largura, altura;
@@ -244,6 +289,7 @@ int main(int argc, char** argv)
    glutDisplayFunc(Desenha);
    glutReshapeFunc(AlteraTamanhoJanela); // Registra a função callback de redimensionamento da janela de visualização
    glutKeyboardFunc (Teclado);
+   glutMouseFunc (GerenciaMouse);
    Inicializa();
    glutMainLoop();
    
