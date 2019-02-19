@@ -10,20 +10,25 @@
 //linhas pretas
 //*****************************************************
 
+#define nCores 3
+
 #include <stdlib.h>
+#include <stdio.h>
 #include <GL/glut.h>
-#define xStep 5 //incremento no eixo x
-#define yStep 5 //incremento no eixo y
+#define xStep 1 //incremento no eixo x
+#define yStep 1 //incremento no eixo y
+#define maxY 105 //valor máximo do eixo Y
+#define maxX 105 //valor máximo do eixo X
 
 // Variáveis que guardam a translação que será aplicada 
 // sobre a casinha
-GLfloat Tx;
-GLfloat Ty;
+int Tx=0;
+int Ty=0;
 
 // Variáveis que guardam os valores mínimos de x e y da 
 // casinha
-GLfloat minX, maxX;
-GLfloat minY, maxY;
+GLfloat minX;
+GLfloat minY;
 
 // Variáveis que guardam a largura e altura da janela
 GLfloat windowXmin, windowXmax;
@@ -34,10 +39,78 @@ int x1,x2,x3;
 
 int y4,y2,y3;
 
+struct cor
+{
+   float r;
+   float g;
+   float b;
+};
+
+struct objeto
+{
+   float x1,x2,y1,y2;
+};
+
+struct cor fundo;
+struct cor paredes;
+struct cor objeto;
+struct cor coresParedes[nCores];
+struct cor coresFundo[nCores];
+struct cor coresObjeto[nCores];
+struct objeto l1, tri;
+int i = 0;
+
 
 void Inicializa (void)
 {
+   
+   //1 mudança
+   
+   coresParedes[0].r = 0;
+   coresParedes[0].g = 0; //parede preto.
+   coresParedes[0].b = 0;
+
+   coresFundo[0].r = 1; 
+   coresFundo[0].g = 1; //fundo branco.
+   coresFundo[0].b = 1;
+
+   coresObjeto[0].r = 1;
+   coresObjeto[0].g = 0;//objeto vermelho
+   coresObjeto[0].b = 0;
+
+   // 2 mudança
+
+   coresParedes[1].r = 1;
+   coresParedes[1].g = 1;//parede branca
+   coresParedes[1].b = 1;
+
+   coresFundo[1].r = 0;
+   coresFundo[1].g = 0; //fundo  preto
+   coresFundo[1].b = 0;
+
+   coresObjeto[1].r = 1;
+   coresObjeto[1].g = 1; //objeto amarelo
+   coresObjeto[1].b = 0;
+
+   // 3 mudança
+   coresParedes[2].r = 1;
+   coresParedes[2].g = 0;//parede magenta
+   coresParedes[2].b = 1;
+
+   coresFundo[2].r = 0;
+   coresFundo[2].g = 1; //fundo ciano 
+   coresFundo[2].b = 1;
+
+   coresObjeto[2].r = 0.5;
+   coresObjeto[2].g = 0.5; //objeto cinza
+   coresObjeto[2].b = 0.5;
+
+   paredes = coresParedes[i];
+   fundo = coresFundo[i];
+   objeto = coresObjeto[i];
+
    // Define a cor de fundo da janela de visualização como branco
+
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
    x1 = 0;
    x2 = 10;
@@ -45,28 +118,55 @@ void Inicializa (void)
    y4 = 30;
    y2 = 30;
    y3 = 40;
+
+   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+
+
    // Define a janela de visualização 2D
    glMatrixMode(GL_PROJECTION);
-   gluOrtho2D(0.0,105.0,0.0,105.0);
+   gluOrtho2D(0.0,maxX,0.0,maxY);
    glMatrixMode(GL_MODELVIEW); //para n manipular a matriz de projeção
 }
+
+
+void desenhaTriangulo(){
+   
+   glColor3f(objeto.r,objeto.g,objeto.b);
+   
+   glBegin(GL_TRIANGLES);
+   glVertex2f(x1+Tx, y4+Ty);
+   glVertex2f(x2+Tx, y2+Ty);
+   glVertex2f(x3+Tx, y3+Ty);
+   glEnd();
+
+  
+}
+
+
+void detectaColisao(struct objeto tri, struct objeto linha){
+   if(linha.x1 < tri.x1 &&  linha.x1 > tri.x2)
+      printf("colidiu\n");
+}
+
+
    // Função callback chamada para fazer o desenho
 void Desenha(void)
 {
+
       
    // Muda para o sistema de coordenadas do modelo
    glMatrixMode(GL_MODELVIEW);
    // Inicializa a matriz de transformação corrente
    glLoadIdentity();
-   
+ 
+   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+
    //Limpa a janela de visualização com a cor de fundo especificada
    glClear(GL_COLOR_BUFFER_BIT);
    
-   // Aplica uma translação sobre a casinha
-   glTranslatef(Tx, Ty, 0.0f);
-    
+   
    // Define a cor de desenho: preto
-   glColor3f(0.0,0.0,0.0);
+   glColor3f(paredes.r,paredes.g,paredes.b);
  
    //Desenhando as linhas do labirinto na cor corrente.
    
@@ -157,68 +257,104 @@ void Desenha(void)
    glVertex2f(60,105);
    glEnd();
    
+   //Desenhando um triangulo vermelho de acordo com as transformações:
    
+   glPushMatrix();  
    
+   glTranslatef(1,1,0.0f);
   
+   desenhaTriangulo();
    
-   //Desenhando um triangulo vermelho:
+   //glPopMatrix();
    
-   glColor3f(1,0,0);
-   glBegin(GL_TRIANGLES);
-   glVertex2f(x1, y4);
-   glVertex2f(x2, y2);
-   glVertex2f(x3, y3);
-   glEnd();
-
-  
-
    glutSwapBuffers();
 }
 
 
-/*
 // Função callback chamada para gerenciar eventos do mouse
 void GerenciaMouse(int button, int state, int x, int y)
 {
     if (button == GLUT_LEFT_BUTTON)
-         if (state == GLUT_DOWN) {
-               
-                  
-         }
+         paredes = coresParedes[i];
+         fundo = coresFundo[i];
+         objeto = coresObjeto[i];
+         i++;
+         if(i >= nCores)
+            i = 0;
     glutPostRedisplay();
 }
 
-
-*/
 
 // Função callback chamada para gerenciar eventos do teclado   
 // para teclas especiais, tais como F1, PgDn e Home
-void TeclasEspeciais(int key)
+void TeclasEspeciais(int key, int x, int y)
 {
-    if(key == GLUT_KEY_UP) {
-           Ty+= yStep;
-           glMatrixMode(GL_PROJECTION);
-           
-    }
-    if(key == GLUT_KEY_DOWN) {
-           Ty -= yStep;
-           glMatrixMode(GL_PROJECTION);
-           
-    }
-    if(key == GLUT_KEY_RIGHT) {
-           Tx += xStep;
-           glMatrixMode(GL_PROJECTION);
-           
-    }
-    if(key == GLUT_KEY_LEFT) {
-           Tx -= xStep;
-           glMatrixMode(GL_PROJECTION);
-           
-    }
+   
+   printf("TX=%d, TY=%d\n", Tx,Ty);
+   if(key == GLUT_KEY_UP) {
+      Ty+= yStep;
+      printf("Ty= %d  \n", Ty);
+      if(( y3 + Ty) > 104){
+         Ty = 0;
+         Tx = 0;
+      }
+   }
+    
+   if(key == GLUT_KEY_DOWN) {
+      Ty -= yStep;
+      printf("y4= %d Ty= %d  \n",y4, Ty);
+      if(( y4 + Ty) < 0){
+         Ty = 0;
+         Tx = 0;
+      }
+   }
+    
+   if(key == GLUT_KEY_RIGHT) {
+      Tx += xStep;
+      printf("Tx= %d  \n", Tx);
+   }
+   
+   if(key == GLUT_KEY_LEFT) {
+      Tx -= xStep;
+      printf("Tx= %d  \n", Tx);
+   }
+   
+   //encapsulando o objeto com uma lógica bizarra oriental:
+   
+   
+   tri.y1 = y3 + Ty;
+   tri.x1 =  x2 + Tx;
+   tri.x2 = x1 + Tx;
+   tri.y2 = y4 + Ty;
+   
+   printf("y1 (reta de cima) = %f, y2 (reta de baixo) = %f", tri.y1, tri.y2);
 
+   detectaColisao(tri,l1);
+
+   
     glutPostRedisplay();
+  //  Desenha();
+     //  glutTimerFunc(150, TeclasEspeciais, 1);
 }
    
+void GerenciaTeclado(unsigned char key, int x, int y)
+{
+    switch (key) {
+            case 'R': 
+            case 'r':// muda a cor corrente para vermelho
+                     glColor3f(1.0f, 0.0f, 0.0f);
+                     break;
+            case 'G':
+            case 'g':// muda a cor corrente para verde
+                     glColor3f(0.0f, 1.0f, 0.0f);
+                     break;
+            case 'B':
+            case 'b':// muda a cor corrente para azul
+                     glColor3f(0.0f, 0.0f, 1.0f);
+                     break;
+    }
+    glutPostRedisplay();
+}   
 
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
@@ -276,8 +412,12 @@ int main(int argc, char** argv)
    glutDisplayFunc(Desenha);
    glutReshapeFunc(AlteraTamanhoJanela); // Registra a função callback de redimensionamento da janela de visualização
    glutKeyboardFunc (Teclado);
+   glutSpecialFunc(TeclasEspeciais);
+
    // Registra a função callback que será chamada a cada intervalo de tempo
-   glutTimerFunc(150, TeclasEspeciais, 1);
+   // glutTimerFunc(150, TeclasEspeciais, 1);
+   
+   glutMouseFunc (GerenciaMouse);
    Inicializa();
    glutMainLoop();
    
