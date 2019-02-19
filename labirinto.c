@@ -35,9 +35,9 @@ GLfloat windowXmin, windowXmax;
 GLfloat windowYmin, windowYmax;
 
 //Variáveis que guardam os vértices do triangulo
-int x1,x2,x3;
+int x1,x2,x3,x4;
 
-int y4,y2,y3;
+int y4,y2,y3,y5;
 
 struct cor
 {
@@ -57,7 +57,7 @@ struct cor objeto;
 struct cor coresParedes[nCores];
 struct cor coresFundo[nCores];
 struct cor coresObjeto[nCores];
-struct objeto l1, tri;
+struct objeto l1,l2, tri;
 int i = 0;
 
 
@@ -114,10 +114,12 @@ void Inicializa (void)
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
    x1 = 0;
    x2 = 10;
-   x3 = 5;
+   x3 =10;
+   x4 = 0;
    y4 = 30;
    y2 = 30;
    y3 = 40;
+   y5 = 40;
 
    glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
 
@@ -133,10 +135,11 @@ void desenhaTriangulo(){
    
    glColor3f(objeto.r,objeto.g,objeto.b);
    
-   glBegin(GL_TRIANGLES);
-   glVertex2f(x1+Tx, y4+Ty);
-   glVertex2f(x2+Tx, y2+Ty);
-   glVertex2f(x3+Tx, y3+Ty);
+   glBegin(GL_QUADS);
+   glVertex2f(x1 + Tx, y4 + Ty);
+   glVertex2f(x2 + Tx, y2 + Ty);
+   glVertex2f(x3 + Tx, y3 + Ty);
+   glVertex2f(x4 + Tx, y5 + Ty);
    glEnd();
 
   
@@ -144,8 +147,15 @@ void desenhaTriangulo(){
 
 
 void detectaColisao(struct objeto tri, struct objeto linha){
-   if(linha.x1 < tri.x1 &&  linha.x1 > tri.x2)
-      printf("colidiu\n");
+   if(((linha.x2 -1) == tri.x1) || ((linha.x1 -1) == tri.x2))
+      if((tri.y1 >= (linha.y1 -1)) && (tri.y2 <= (linha.y2)-1) )
+         printf("colidiu\n");
+   
+   if(((linha.y2 -1) == tri.y2) || ((linha.y1 -1) == tri.y1))
+      if(((linha.x1 -1) <= tri.x2) && ((linha.x2 -1) >= tri.x1))
+         printf("colidiu\n");
+
+
 }
 
 
@@ -170,7 +180,7 @@ void Desenha(void)
  
    //Desenhando as linhas do labirinto na cor corrente.
    
-   glLineWidth(2);
+   glLineWidth(3);
    glBegin(GL_LINES);
    glVertex2f(0, 0);
    glVertex2f(105, 0);
@@ -214,6 +224,11 @@ void Desenha(void)
    glVertex2f(75, 0);
    glVertex2f(75, 15);
    glEnd();
+
+   l1.x1 = 75;
+   l1.x2 = 75;
+   l1.y1 = 0;
+   l1.y2 = 15;
    
    glBegin(GL_LINES);
    glVertex2f(105, 105);
@@ -245,6 +260,11 @@ void Desenha(void)
    glVertex2f(60, 60);
    glVertex2f(75, 60);
    glEnd();
+
+   l2.x1 = 60;
+   l2.x2 = 75;
+   l2.y1 = 60;
+   l2.y2 = 60;
    
    glBegin(GL_LINE_STRIP);
    glVertex2f(90, 15);
@@ -294,7 +314,7 @@ void TeclasEspeciais(int key, int x, int y)
    if(key == GLUT_KEY_UP) {
       Ty+= yStep;
       printf("Ty= %d  \n", Ty);
-      if(( y3 + Ty) > 104){
+      if(( y3 + Ty) > 103){
          Ty = 0;
          Tx = 0;
       }
@@ -311,26 +331,32 @@ void TeclasEspeciais(int key, int x, int y)
     
    if(key == GLUT_KEY_RIGHT) {
       Tx += xStep;
-      printf("Tx= %d  \n", Tx);
+      if(( x2 + Tx) > 103){
+         Ty = 0;
+         Tx = 0;
+      }
    }
    
    if(key == GLUT_KEY_LEFT) {
       Tx -= xStep;
-      printf("Tx= %d  \n", Tx);
+      if(( x1 + Tx) < 0){
+         Ty = 0;
+         Tx = 0;
+      }
    }
    
    //encapsulando o objeto com uma lógica bizarra oriental:
    
    
    tri.y1 = y3 + Ty;
-   tri.x1 =  x2 + Tx;
-   tri.x2 = x1 + Tx;
+   tri.x1 =  x1 + Tx;
+   tri.x2 = x2 + Tx;
    tri.y2 = y4 + Ty;
    
-   printf("y1 (reta de cima) = %f, y2 (reta de baixo) = %f", tri.y1, tri.y2);
-
+   printf("x1 (reta de cima) = %f, x2 (reta de baixo) = %f", tri.x1, tri.x2);
+   
    detectaColisao(tri,l1);
-
+   detectaColisao(tri,l2);
    
     glutPostRedisplay();
   //  Desenha();
