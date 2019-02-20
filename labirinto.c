@@ -19,7 +19,8 @@
 #define yStep 1 //incremento no eixo y
 #define maxY 105 //valor máximo do eixo Y
 #define maxX 105 //valor máximo do eixo X
-
+#define nlinhas 29
+int vidas = 4;
 // Variáveis que guardam a translação que será aplicada 
 // sobre a casinha
 int Tx=0;
@@ -57,7 +58,7 @@ struct cor objeto;
 struct cor coresParedes[nCores];
 struct cor coresFundo[nCores];
 struct cor coresObjeto[nCores];
-struct objeto l1,l2, tri;
+struct objeto linhas[nlinhas], tri;
 int i = 0;
 
 
@@ -142,28 +143,72 @@ void desenhaTriangulo(){
    glVertex2f(x4 + Tx, y5 + Ty);
    glEnd();
 
-  
 }
-
 
 void detectaColisao(struct objeto tri, struct objeto linha){
    if(((linha.x2 -1) == tri.x1) || ((linha.x1 -1) == tri.x2))
-      if((tri.y1 >= (linha.y1 -1)) && (tri.y2 <= (linha.y2)-1) )
+      if((tri.y1 >= (linha.y1 -1)) && (tri.y2 <= (linha.y2)-1) ){
          printf("colidiu\n");
-   
-   if(((linha.y2 -1) == tri.y2) || ((linha.y1 -1) == tri.y1))
-      if(((linha.x1 -1) <= tri.x2) && ((linha.x2 -1) >= tri.x1))
-         printf("colidiu\n");
+         Tx = Ty= 0;
+         vidas--;
+      }
 
+   if(((linha.y2 -1) == tri.y2) || ((linha.y1 -1) == tri.y1))
+      if(((linha.x1 -1) <= tri.x2) && ((linha.x2 -1) >= tri.x1)){
+         printf("colidiu\n");
+         Tx = Ty= 0;
+         vidas--;
+      }
 
 }
 
+void desenhaVidas(){
+   
+   glColor3f(objeto.r,objeto.g,objeto.b);
 
+   if(vidas == 0)
+      vidas =4;
+
+   if(vidas >=1){
+      glBegin(GL_QUADS);
+      glVertex2f(5 , 110);
+      glVertex2f(15, 110);
+      glVertex2f(15, 120);
+      glVertex2f(5, 120);
+      glEnd();
+   }
+
+   if(vidas >= 2){
+      glBegin(GL_QUADS);
+      glVertex2f(20 , 110);
+      glVertex2f(30, 110);
+      glVertex2f(30, 120);
+      glVertex2f(20, 120);
+      glEnd();
+   }
+
+   if(vidas >= 3){
+      glBegin(GL_QUADS);
+      glVertex2f(35 , 110);
+      glVertex2f(45, 110);
+      glVertex2f(45, 120);
+      glVertex2f(35, 120);
+      glEnd();
+   }
+
+   if(vidas == 4){
+      glBegin(GL_QUADS);
+      glVertex2f(50 , 110);
+      glVertex2f(60, 110);
+      glVertex2f(60, 120);
+      glVertex2f(50, 120);
+      glEnd();
+   }
+}
    // Função callback chamada para fazer o desenho
 void Desenha(void)
 {
-
-      
+     
    // Muda para o sistema de coordenadas do modelo
    glMatrixMode(GL_MODELVIEW);
    // Inicializa a matriz de transformação corrente
@@ -185,6 +230,153 @@ void Desenha(void)
    glVertex2f(0, 0);
    glVertex2f(105, 0);
    glEnd();
+
+   linhas[0].x1 = 0;
+   linhas[0].x2 = 0;
+   linhas[0].y1 = 0;
+   linhas[0].y2 = 30;
+   
+   linhas[1].x1 = 0;
+   linhas[1].x2 = 0;
+   linhas[1].y1 = 45;
+   linhas[1].y2 = 105;
+
+   linhas[2].x1 = 15;
+   linhas[2].x2 = 15;
+   linhas[2].y1 = 30;
+   linhas[2].y2 = 45;
+
+   linhas[3].x1 = 15;
+   linhas[3].x2 = 15;
+   linhas[3].y1 = 60;
+   linhas[3].y2 = 90;
+
+   linhas[4].x1 = 30;
+   linhas[4].x2 = 30;
+   linhas[4].y1 = 15;
+   linhas[4].y2 = 75;
+
+   linhas[5].x1 = 45;
+   linhas[5].x2 = 45;
+   linhas[5].y1 = 15;
+   linhas[5].y2 = 60;
+   
+   linhas[6].x1 = 45;
+   linhas[6].x2 = 45;
+   linhas[6].y1 = 75;
+   linhas[6].y2 = 90;
+   
+   linhas[7].x1 = 60;
+   linhas[7].x2 = 60;
+   linhas[7].y1 = 15;
+   linhas[7].y2 = 30;
+   
+   linhas[8].x1 = 60;
+   linhas[8].x2 = 60;
+   linhas[8].y1 = 60;
+   linhas[8].y2 = 105;
+   
+   linhas[9].x1 = 75;
+   linhas[9].x2 = 75;
+   linhas[9].y1 = 0;
+   linhas[9].y2 = 15;
+
+   linhas[10].x1 = 90;
+   linhas[10].x2 = 90;
+   linhas[10].y1 = 15;
+   linhas[10].y2 = 30;
+
+   linhas[11].x1 = 90;
+   linhas[11].x2 = 90;
+   linhas[11].y1 = 45;
+   linhas[11].y2 = 90;
+ 
+   linhas[12].x1 = 105;
+   linhas[12].x2 = 105;
+   linhas[12].y1 = 0;
+   linhas[12].y2 = 45;
+   
+   linhas[13].x1 = 105;
+   linhas[13].x2 = 105;
+   linhas[13].y1 = 60;
+   linhas[13].y2 = 105;
+
+//////////////////////////////////////////////////
+
+   linhas[14].x1 = 0;
+   linhas[14].x2 = 15;
+   linhas[14].y1 = 30;
+   linhas[14].y2 = 30;
+
+   linhas[15].x1 = 0;
+   linhas[15].x2 = 15;
+   linhas[15].y1 = 60;
+   linhas[15].y2 = 60;
+   
+   linhas[16].x1 = 15;
+   linhas[16].x2 = 30;
+   linhas[16].y1 = 15;
+   linhas[16].y2 = 15;
+   
+   linhas[17].x1 = 15;
+   linhas[17].x2 = 30;
+   linhas[17].y1 = 45;
+   linhas[17].y2 = 45;
+   
+   linhas[18].x1 = 15;
+   linhas[18].x2 = 30;
+   linhas[18].y1 = 90;
+   linhas[18].y2 = 90;
+   
+   linhas[19].x1 = 30;
+   linhas[19].x2 = 45;
+   linhas[19].y1 = 75;
+   linhas[19].y2 = 75;
+   
+   linhas[20].x1 = 45;
+   linhas[20].x2 = 60;
+   linhas[20].y1 = 15;
+   linhas[20].y2 = 15;
+   
+   linhas[21].x1 = 45;
+   linhas[21].x2 = 60;
+   linhas[21].y1 = 60;
+   linhas[21].y2 = 60;
+
+   linhas[22].x1 = 60;
+   linhas[22].x2 = 90;
+   linhas[22].y1 = 30;
+   linhas[22].y2 = 30;
+
+   linhas[23].x1 = 60;
+   linhas[23].x2 = 105;
+   linhas[23].y1 = 45;
+   linhas[23].y2 = 45;
+
+   linhas[24].x1 = 60;
+   linhas[24].x2 = 75;
+   linhas[24].y1 = 60;
+   linhas[24].y2 = 60;
+
+   linhas[25].x1 = 60;
+   linhas[25].x2 = 75;
+   linhas[25].y1 = 90;
+   linhas[25].y2 = 90;
+   
+   linhas[26].x1 = 75;
+   linhas[26].x2 = 90;
+   linhas[26].y1 = 75;
+   linhas[26].y2 = 75;
+   
+   linhas[27].x1 = 0;
+   linhas[27].x2 = 105;
+   linhas[27].y1 = 0;
+   linhas[27].y2 = 0;
+   
+   linhas[28].x1 = 0;
+   linhas[28].x2 = 105;
+   linhas[28].y1 = 105;
+   linhas[28].y2 = 105;
    
    glBegin(GL_LINES);
    glVertex2f(0, 105);
@@ -224,11 +416,6 @@ void Desenha(void)
    glVertex2f(75, 0);
    glVertex2f(75, 15);
    glEnd();
-
-   l1.x1 = 75;
-   l1.x2 = 75;
-   l1.y1 = 0;
-   l1.y2 = 15;
    
    glBegin(GL_LINES);
    glVertex2f(105, 105);
@@ -260,11 +447,6 @@ void Desenha(void)
    glVertex2f(60, 60);
    glVertex2f(75, 60);
    glEnd();
-
-   l2.x1 = 60;
-   l2.x2 = 75;
-   l2.y1 = 60;
-   l2.y2 = 60;
    
    glBegin(GL_LINE_STRIP);
    glVertex2f(90, 15);
@@ -285,11 +467,10 @@ void Desenha(void)
   
    desenhaTriangulo();
    
-   //glPopMatrix();
+   desenhaVidas();
    
    glutSwapBuffers();
 }
-
 
 // Função callback chamada para gerenciar eventos do mouse
 void GerenciaMouse(int button, int state, int x, int y)
@@ -309,32 +490,21 @@ void GerenciaMouse(int button, int state, int x, int y)
 // para teclas especiais, tais como F1, PgDn e Home
 void TeclasEspeciais(int key, int x, int y)
 {
-   
+   int i;
+
    printf("TX=%d, TY=%d\n", Tx,Ty);
    if(key == GLUT_KEY_UP) {
       Ty+= yStep;
       printf("Ty= %d  \n", Ty);
-      if(( y3 + Ty) > 103){
-         Ty = 0;
-         Tx = 0;
-      }
    }
     
    if(key == GLUT_KEY_DOWN) {
       Ty -= yStep;
       printf("y4= %d Ty= %d  \n",y4, Ty);
-      if(( y4 + Ty) < 0){
-         Ty = 0;
-         Tx = 0;
-      }
    }
     
    if(key == GLUT_KEY_RIGHT) {
       Tx += xStep;
-      if(( x2 + Tx) > 103){
-         Ty = 0;
-         Tx = 0;
-      }
    }
    
    if(key == GLUT_KEY_LEFT) {
@@ -347,7 +517,6 @@ void TeclasEspeciais(int key, int x, int y)
    
    //encapsulando o objeto com uma lógica bizarra oriental:
    
-   
    tri.y1 = y3 + Ty;
    tri.x1 =  x1 + Tx;
    tri.x2 = x2 + Tx;
@@ -355,8 +524,11 @@ void TeclasEspeciais(int key, int x, int y)
    
    printf("x1 (reta de cima) = %f, x2 (reta de baixo) = %f", tri.x1, tri.x2);
    
-   detectaColisao(tri,l1);
-   detectaColisao(tri,l2);
+   for(i = 0; i < nlinhas; i++)
+   {
+      detectaColisao(tri,linhas[i]);
+   }
+   
    
     glutPostRedisplay();
   //  Desenha();
@@ -404,17 +576,17 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 	// superior) mantendo a proporção com a janela de visualização
 	if (largura <= altura) 
 	{
-		gluOrtho2D (0.0f, 105.0f, 0.0f*altura/largura, 105.0f*altura/largura);
+		gluOrtho2D (0.0f, 105.0f, 0.0f*altura/largura, 125.0f*altura/largura);
 		windowXmin = 0.0f;
 		windowXmax =  105.0f;
 		windowYmin = 0.0f*altura/largura;
-		windowYmax = 105.0f*altura/largura;
+		windowYmax = 125.0f*altura/largura;
 	}
 	else
 	{ 
-		gluOrtho2D (0.0f*largura/altura, 105.0f*largura/altura, 0.0f, 105.0f);
+		gluOrtho2D (0.0f*largura/altura, 125.0f*largura/altura, 0.0f, 105.0f);
 		windowXmin = 0.0f*largura/altura;
-		windowXmax =  105.0f*largura/altura;
+		windowXmax =  125.0f*largura/altura;
 		windowYmin = 0.0f;
 		windowYmax =  105.0f;
 	}
