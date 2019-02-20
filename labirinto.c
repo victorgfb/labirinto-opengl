@@ -17,7 +17,7 @@
 #include <GL/glut.h>
 #define xStep 1 //incremento no eixo x
 #define yStep 1 //incremento no eixo y
-#define maxY 105 //valor máximo do eixo Y
+#define maxY 125 //valor máximo do eixo Y
 #define maxX 105 //valor máximo do eixo X
 #define nlinhas 29
 int vidas = 4;
@@ -109,127 +109,6 @@ void Inicializa (void)
    paredes = coresParedes[i];
    fundo = coresFundo[i];
    objeto = coresObjeto[i];
-
-   // Define a cor de fundo da janela de visualização como branco
-
-   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-   x1 = 0;
-   x2 = 10;
-   x3 =10;
-   x4 = 0;
-   y4 = 30;
-   y2 = 30;
-   y3 = 40;
-   y5 = 40;
-
-   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
-
-
-   // Define a janela de visualização 2D
-   glMatrixMode(GL_PROJECTION);
-   gluOrtho2D(0.0,maxX,0.0,maxY);
-   glMatrixMode(GL_MODELVIEW); //para n manipular a matriz de projeção
-}
-
-
-void desenhaTriangulo(){
-   
-   glColor3f(objeto.r,objeto.g,objeto.b);
-   
-   glBegin(GL_QUADS);
-   glVertex2f(x1 + Tx, y4 + Ty);
-   glVertex2f(x2 + Tx, y2 + Ty);
-   glVertex2f(x3 + Tx, y3 + Ty);
-   glVertex2f(x4 + Tx, y5 + Ty);
-   glEnd();
-
-}
-
-void detectaColisao(struct objeto tri, struct objeto linha){
-   if(((linha.x2 -1) == tri.x1) || ((linha.x1 -1) == tri.x2))
-      if((tri.y1 >= (linha.y1 -1)) && (tri.y2 <= (linha.y2)-1) ){
-         printf("colidiu\n");
-         Tx = Ty= 0;
-         vidas--;
-      }
-
-   if(((linha.y2 -1) == tri.y2) || ((linha.y1 -1) == tri.y1))
-      if(((linha.x1 -1) <= tri.x2) && ((linha.x2 -1) >= tri.x1)){
-         printf("colidiu\n");
-         Tx = Ty= 0;
-         vidas--;
-      }
-
-}
-
-void desenhaVidas(){
-   
-   glColor3f(objeto.r,objeto.g,objeto.b);
-
-   if(vidas == 0)
-      vidas =4;
-
-   if(vidas >=1){
-      glBegin(GL_QUADS);
-      glVertex2f(5 , 110);
-      glVertex2f(15, 110);
-      glVertex2f(15, 120);
-      glVertex2f(5, 120);
-      glEnd();
-   }
-
-   if(vidas >= 2){
-      glBegin(GL_QUADS);
-      glVertex2f(20 , 110);
-      glVertex2f(30, 110);
-      glVertex2f(30, 120);
-      glVertex2f(20, 120);
-      glEnd();
-   }
-
-   if(vidas >= 3){
-      glBegin(GL_QUADS);
-      glVertex2f(35 , 110);
-      glVertex2f(45, 110);
-      glVertex2f(45, 120);
-      glVertex2f(35, 120);
-      glEnd();
-   }
-
-   if(vidas == 4){
-      glBegin(GL_QUADS);
-      glVertex2f(50 , 110);
-      glVertex2f(60, 110);
-      glVertex2f(60, 120);
-      glVertex2f(50, 120);
-      glEnd();
-   }
-}
-   // Função callback chamada para fazer o desenho
-void Desenha(void)
-{
-     
-   // Muda para o sistema de coordenadas do modelo
-   glMatrixMode(GL_MODELVIEW);
-   // Inicializa a matriz de transformação corrente
-   glLoadIdentity();
- 
-   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
-
-   //Limpa a janela de visualização com a cor de fundo especificada
-   glClear(GL_COLOR_BUFFER_BIT);
-   
-   
-   // Define a cor de desenho: preto
-   glColor3f(paredes.r,paredes.g,paredes.b);
- 
-   //Desenhando as linhas do labirinto na cor corrente.
-   
-   glLineWidth(3);
-   glBegin(GL_LINES);
-   glVertex2f(0, 0);
-   glVertex2f(105, 0);
-   glEnd();
 
    linhas[0].x1 = 0;
    linhas[0].x2 = 0;
@@ -378,6 +257,171 @@ void Desenha(void)
    linhas[28].y1 = 105;
    linhas[28].y2 = 105;
    
+   
+   // Define a cor de fundo da janela de visualização como branco
+
+   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+   x1 = 0;
+   x2 = 10;
+   x3 =10;
+   x4 = 0;
+   y4 = 30;
+   y2 = 30;
+   y3 = 40;
+   y5 = 40;
+
+   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+
+
+   // Define a janela de visualização 2D
+   glMatrixMode(GL_PROJECTION);
+   gluOrtho2D(0.0,maxX,0.0,maxY);
+   glMatrixMode(GL_MODELVIEW); //para n manipular a matriz de projeção
+}
+
+
+void desenhaTriangulo(){
+   
+   glColor3f(objeto.r,objeto.g,objeto.b);
+   
+   glBegin(GL_QUADS);
+   glVertex2f(x1 + Tx, y4 + Ty);
+   glVertex2f(x2 + Tx, y2 + Ty);
+   glVertex2f(x3 + Tx, y3 + Ty);
+   glVertex2f(x4 + Tx, y5 + Ty);
+   glEnd();
+
+}
+
+void detectaColisao(struct objeto tri, struct objeto linha){
+   if(((linha.x2 -1) == tri.x1) || ((linha.x1 -1) == tri.x2))
+      if((tri.y1 >= (linha.y1 -1)) && (tri.y2 <= (linha.y2)-1) ){
+         printf("colidiu\n");
+         Tx = Ty= 0;
+         vidas--;
+      }
+
+   if(((linha.y2 -1) == tri.y2) || ((linha.y1 -1) == tri.y1))
+      if(((linha.x1 -1) <= tri.x2) && ((linha.x2 -1) >= tri.x1)){
+         printf("colidiu\n");
+         Tx = Ty= 0;
+         vidas--;
+      }
+
+}
+
+void desenhaVidas(){
+   
+   glColor3f(objeto.r,objeto.g,objeto.b);
+
+   //if(vidas == 0)
+      //vidas =4;
+
+   if(vidas >=1){
+      glBegin(GL_QUADS);
+      glVertex2f(5 , 110);
+      glVertex2f(15, 110);
+      glVertex2f(15, 120);
+      glVertex2f(5, 120);
+      glEnd();
+   }
+
+   if(vidas >= 2){
+      glBegin(GL_QUADS);
+      glVertex2f(20 , 110);
+      glVertex2f(30, 110);
+      glVertex2f(30, 120);
+      glVertex2f(20, 120);
+      glEnd();
+   }
+
+   if(vidas >= 3){
+      glBegin(GL_QUADS);
+      glVertex2f(35 , 110);
+      glVertex2f(45, 110);
+      glVertex2f(45, 120);
+      glVertex2f(35, 120);
+      glEnd();
+   }
+
+   if(vidas == 4){
+      glBegin(GL_QUADS);
+      glVertex2f(50 , 110);
+      glVertex2f(60, 110);
+      glVertex2f(60, 120);
+      glVertex2f(50, 120);
+      glEnd();
+   }
+}
+
+void DesenhaTextoStroke(void *font, char *string) 
+{  
+	// Exibe caractere a caractere
+	while(*string)
+		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,*string++); 
+}
+
+void DesenhaTexto(void *font, char *string) 
+{
+	// Exibe caractere a caractere
+	while(*string)
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++); 
+}
+
+   // Função callback chamada para fazer o desenho
+void Desenha(void)
+{
+     
+   // Muda para o sistema de coordenadas do modelo
+   glMatrixMode(GL_MODELVIEW);
+   // Inicializa a matriz de transformação corrente
+   glLoadIdentity();
+ 
+   glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+
+   //Limpa a janela de visualização com a cor de fundo especificada
+   glClear(GL_COLOR_BUFFER_BIT);
+   
+   
+   // Define a cor de desenho: preto
+   glColor3f(paredes.r,paredes.g,paredes.b);
+ 
+   //CASO PERDEU:
+   
+   
+   if(vidas == 0){
+      glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+      glColor3f(objeto.r, objeto.g, objeto.b);
+      glTranslatef(0,60,0);
+      glScalef(0.1, 0.1, 0.1);
+      DesenhaTextoStroke(GLUT_STROKE_ROMAN,"GAME OVER!");
+      /*
+      glTranslatef(0,30,0);
+      glScalef(0.05, 0.05, 0.05);
+      DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Press enter to try again.");
+      */
+      vidas = 4;
+   }   
+   
+   if((tri.x1 > 105)&&(tri.x2>105)){
+      glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
+      glColor3f(objeto.r, objeto.g, objeto.b);
+      glTranslatef(0,60,0);
+      glScalef(0.1, 0.1, 0.1);
+      DesenhaTextoStroke(GLUT_STROKE_ROMAN,"VITORY! :)");
+      vidas = 4;
+      Tx = 0;
+      Ty = 0;
+   }
+   
+   //Desenhando as linhas do labirinto na cor corrente.
+   
+   glLineWidth(3);
+   glBegin(GL_LINES);
+   glVertex2f(0, 0);
+   glVertex2f(105, 0);
+   glEnd();
+
    glBegin(GL_LINES);
    glVertex2f(0, 105);
    glVertex2f(105, 105);
@@ -538,18 +582,7 @@ void TeclasEspeciais(int key, int x, int y)
 void GerenciaTeclado(unsigned char key, int x, int y)
 {
     switch (key) {
-            case 'R': 
-            case 'r':// muda a cor corrente para vermelho
-                     glColor3f(1.0f, 0.0f, 0.0f);
-                     break;
-            case 'G':
-            case 'g':// muda a cor corrente para verde
-                     glColor3f(0.0f, 1.0f, 0.0f);
-                     break;
-            case 'B':
-            case 'b':// muda a cor corrente para azul
-                     glColor3f(0.0f, 0.0f, 1.0f);
-                     break;
+
     }
     glutPostRedisplay();
 }   
@@ -584,11 +617,11 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 	}
 	else
 	{ 
-		gluOrtho2D (0.0f*largura/altura, 125.0f*largura/altura, 0.0f, 105.0f);
+		gluOrtho2D (0.0f*largura/altura, 105.0f*largura/altura, 0.0f, 125.0f);
 		windowXmin = 0.0f*largura/altura;
-		windowXmax =  125.0f*largura/altura;
+		windowXmax =  105.0f*largura/altura;
 		windowYmin = 0.0f;
-		windowYmax =  105.0f;
+		windowYmax =  125.0f;
 	}
 }
 
