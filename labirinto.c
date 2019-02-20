@@ -401,6 +401,8 @@ void Desenha(void)
       DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Press enter to try again.");
       */
       vidas = 4;
+      glutSwapBuffers();
+      return;
    }   
    
    if((tri.x1 > 105)&&(tri.x2>105)){
