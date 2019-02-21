@@ -550,13 +550,14 @@ void TeclasEspeciais(int key, int x, int y)
 {
    int i;
 
-   printf("TX=%d, TY=%d, acabou =%d\n", Tx,Ty,acabou);
+   printf("TX=%d, TY=%d, acabou =%d\n", Tx,Ty,key);
    
     if(acabou == 1){
-        printf("entrou");
-        acabou = 0;
-        glutPostRedisplay();
-        return;
+        if(key != GLUT_KEY_HOME){
+            return;
+        }else{
+             acabou = 0;
+        }
     }
    
    if(key == GLUT_KEY_UP) {
@@ -591,10 +592,8 @@ void TeclasEspeciais(int key, int x, int y)
       detectaColisao(tri,linhas[i]);
    }
    
-   
     glutPostRedisplay();
-  //  Desenha();
-     //  glutTimerFunc(150, TeclasEspeciais, 1);
+  
 }
    
 void GerenciaTeclado(unsigned char key, int x, int y)
