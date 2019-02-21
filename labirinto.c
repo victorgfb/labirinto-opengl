@@ -25,6 +25,7 @@ int vidas = 4;
 // sobre a casinha
 int Tx=0;
 int Ty=0;
+int acabou = 0;
 
 // Variáveis que guardam os valores mínimos de x e y da 
 // casinha
@@ -365,7 +366,7 @@ void DesenhaTexto(void *font, char *string)
 {
 	// Exibe caractere a caractere
 	while(*string)
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++); 
+		glutBitmapCharacter(font,*string++); 
 }
 
    // Função callback chamada para fazer o desenho
@@ -401,19 +402,28 @@ void Desenha(void)
       DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Press enter to try again.");
       */
       vidas = 4;
+      acabou = 1;
       glutSwapBuffers();
       return;
    }   
    
-   if((tri.x1 > 105)&&(tri.x2>105)){
+   if((tri.x1 > 105)&&(tri.x2>105) && !acabou){
       glClearColor(fundo.r, fundo.g, fundo.b, 0.0f);
       glColor3f(objeto.r, objeto.g, objeto.b);
       glTranslatef(0,60,0);
       glScalef(0.1, 0.1, 0.1);
       DesenhaTextoStroke(GLUT_STROKE_ROMAN,"VITORY! :)");
       vidas = 4;
+      acabou = 1;
       Tx = 0;
       Ty = 0;
+      tri.y1 = y3;
+      tri.x1 =  x1;
+      tri.x2 = x2;
+      tri.y2 = y4;
+       
+      glutSwapBuffers();
+      return;
    }
    
    //Desenhando as linhas do labirinto na cor corrente.
@@ -521,13 +531,15 @@ void Desenha(void)
 // Função callback chamada para gerenciar eventos do mouse
 void GerenciaMouse(int button, int state, int x, int y)
 {
-    if (button == GLUT_LEFT_BUTTON)
+    if (button == GLUT_LEFT_BUTTON){
          paredes = coresParedes[i];
          fundo = coresFundo[i];
          objeto = coresObjeto[i];
          i++;
          if(i >= nCores)
             i = 0;
+    }
+    
     glutPostRedisplay();
 }
 
@@ -538,7 +550,15 @@ void TeclasEspeciais(int key, int x, int y)
 {
    int i;
 
-   printf("TX=%d, TY=%d\n", Tx,Ty);
+   printf("TX=%d, TY=%d, acabou =%d\n", Tx,Ty,acabou);
+   
+    if(acabou == 1){
+        printf("entrou");
+        acabou = 0;
+        glutPostRedisplay();
+        return;
+    }
+   
    if(key == GLUT_KEY_UP) {
       Ty+= yStep;
       printf("Ty= %d  \n", Ty);
@@ -555,10 +575,6 @@ void TeclasEspeciais(int key, int x, int y)
    
    if(key == GLUT_KEY_LEFT) {
       Tx -= xStep;
-      if(( x1 + Tx) < 0){
-         Ty = 0;
-         Tx = 0;
-      }
    }
    
    //encapsulando o objeto com uma lógica bizarra oriental:
@@ -655,3 +671,4 @@ int main(int argc, char** argv)
    glutMainLoop();
    
 }
+  
